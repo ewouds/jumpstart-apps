@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "adminUsername": {
+      "value": "k3sadmin"
+    },
+    "adminPassword": {
+      "value": "k3sadmin123!!"
+    },
+    "location": {
+      "value": "westus"
+    },
+    "vmSize": {
+      "value": "Standard_D2s_v3"
+    },
+    "workerNodeCount": {
+      "value": 0
+    }
+  }
+}

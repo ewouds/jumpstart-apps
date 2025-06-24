@@ -1,0 +1,15 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: azure-arc-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: User
+  name: "admin@MngEnvMCAP461835.onmicrosoft.com"    # Your current user
+- kind: User
+  name: "e27b044c-97e6-4dec-8449-951f4d35edc5"               # Your Entra Object ID
+  apiGroup: rbac.authorization.k8s.io
