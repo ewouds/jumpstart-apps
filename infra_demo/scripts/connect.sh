@@ -1,4 +1,4 @@
-#admin passw: K3sPassword123!!!
+#admin passw: k3sadmin123!!
 #create bicep resource deployment
 az group create --name k3s-cluster2-rg --location westus
 New-AzResourceGroupDeployment `
@@ -13,6 +13,9 @@ ssh k3sadmin@13.91.251.80
 sudo su -
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
+# export kubeconfig
+export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+                                                   
 # Create connected cluster (PORTAL SCRIPT
 az connectedk8s connect --name "k3s2" --resource-group "k3s-cluster2-rg" --location "westus" --correlation-id "c18ab9d0-685e-48e7-ab55-12588447b0ed" --tags "Datacenter City StateOrDistrict CountryOrRegion"
 
@@ -53,12 +56,13 @@ EOF
 TOKEN=$(kubectl get secret demo-user-secret -o jsonpath='{$.data.token}' | base64 -d | sed 's/$/\n/g')
 
 #PROXY with token
-CLUSTER_NAME=k3s-demo
-RESOURCE_GROUP=k3s-cluster-rg
-TOKEN=eyJhbGciOiJSUzI1NiIsImtpZCI6Ijd4MXV5MURNOEc0WElySno2M2dFanZPN21CNzRiaGsySEd6dkxVM3pGV3cifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImRlbW8tdXNlci1zZWNyZXQiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGVtby11c2VyIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQudWlkIjoiMDQzOWNiZTYtMTJkYy00MDA1LTljM2YtNmJmOGZiNjhhNTBiIiwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50OmRlZmF1bHQ6ZGVtby11c2VyIn0.iCWpCKW-pchJNcNAUgJwtguFfDUDa-XX3vjFc-UrW-Jaad8bQfeiSkTJO054f-u94R2PLPE13BG2B_3yscbuClQt9InH0bcYFsGChxLIiKGNltiAO4LWVgyEm-PAlFwhd7-jkBE3FPtGNWgYTtMfNs0galz_vNHFC5iC3IL7Ut2WyOBk9SgMsv4frDXpXEqwq4hYozaXRnKjr3cnGpFzZ8tk1WWQ4fzdCttBHw0kHhRGJXcQN2l478ZhzdRQePt0Tf3KNAscXcVWQX9pPTJbyM2MROV9BKTDqqoBzUl2xcQYym42oQzh24GyN51LdNAc_vaQFDFbw3Gz8TxSkcs2dw
+
+$CLUSTER_NAME = "k3s_arc"
+$RESOURCE_GROUP = "k3s-cluster2-rg"
+$TOKEN = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjVWcVcybEJsSlpnM2Nuc2dkdzBGRElkRTY5dFdKd0ZIeUJkQU1HcG1zMHcifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImRlbW8tdXNlci1zZWNyZXQiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGVtby11c2VyIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQudWlkIjoiNjdiNzYxMDQtMzBmNi00ZGE2LTlhYWUtNTc4YjM0OWE3ZmJkIiwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50OmRlZmF1bHQ6ZGVtby11c2VyIn0.eoSctXhg-uAstZghW5Mn-6uNjhKICLpEKEog3eJqSR8dvHDqSCEXHqiY4KX_gj7tubgp-uq9wOoTlR6NkJIbsxlEqqSbQS4I62B1eLQ-29dPMMRrW_NTKwAxz13b1q6SGu8zVgQAZxsOKqnRQUU9iRBqtQPTFCvPl9or6Tm709C5prTia1lY9MbRCt4SPenB9dh5wMy5SXBLe6FV1UIyTlGnJQjnKeRubL7Gfy-liUH4TjoJ_7BB-K32Afb7qhwtlvyaC6UsEzh7t7FR262iGsWoG2nJQ4SQCa0gsZOVfn0Mqf-unhd_vYg3DteQD-sqrIqt6DacCh8zdQBJNlNuVQ"
 az connectedk8s proxy -n $CLUSTER_NAME -g $RESOURCE_GROUP --token $TOKEN
 
 #proxy with entra ID
 CLUSTER_NAME=k3s-demo
-RESOURCE_GROUP=k3s-cluster-rg
+RESOURCE_GROUP=k3s-cluster2-rg
 az connectedk8s proxy -n $CLUSTER_NAME -g $RESOURCE_GROUP
